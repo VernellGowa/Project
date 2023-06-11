@@ -8,8 +8,8 @@ CREATE TABLE customers (
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
   phone_number VARCHAR(20) NOT NULL,
-  email VARCHAR(100),
-  password VARCHAR(100),
+  email VARCHAR(100) NOT NULL,
+  password VARCHAR(100) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -19,7 +19,7 @@ CREATE TABLE stylists (
   first_name VARCHAR(50) NOT NULL,
   last_name VARCHAR(50) NOT NULL,
   phone_number VARCHAR(20) NOT NULL,
-  email VARCHAR(100),
+  email VARCHAR(100) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -27,6 +27,7 @@ CREATE TABLE stylists (
 CREATE TABLE services (
   service_id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
+  description VARCHAR(500) NOT NULL,
   price DECIMAL(8, 2) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -39,7 +40,10 @@ CREATE TABLE bookings (
   service_id INT NOT NULL,
   booking_date DATETIME NOT NULL,
   duration INT NOT NULL,
+  cancelled BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  cancelled_at TIMESTAMP,
   FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
   FOREIGN KEY (stylist_id) REFERENCES stylists(stylist_id),
   FOREIGN KEY (service_id) REFERENCES services(service_id)
