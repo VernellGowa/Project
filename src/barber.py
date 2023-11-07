@@ -79,6 +79,7 @@ login_screen.geometry("500x500")
 # Email entry
 email_label = tk.Label(login_screen, text="Email:")
 email_label.pack()
+# email_label.grid(row=0, column=1, padx=10, pady=10)
 email_entry = tk.Entry(login_screen)
 email_entry.pack()
 
@@ -101,3 +102,5 @@ login_status_label = tk.Label(login_screen, text="")
 login_status_label.pack()
 
 login_screen.mainloop()
+
+login()

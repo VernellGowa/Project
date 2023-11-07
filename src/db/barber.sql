@@ -1,3 +1,6 @@
+
+DROP DATABASE IF EXISTS salon;
+
 CREATE DATABASE salon;
 
 USE salon;
@@ -42,12 +45,21 @@ CREATE TABLE bookings (
   duration INT NOT NULL,
   cancelled BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  cancelled_at TIMESTAMP,
+  updated_at TIMESTAMP NULL,
+  cancelled_at TIMESTAMP NULL,
   FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
   FOREIGN KEY (stylist_id) REFERENCES stylists(stylist_id),
   FOREIGN KEY (service_id) REFERENCES services(service_id)
 );
+
+CREATE TABLE likes (
+    like_id INT PRIMARY KEY,
+    customer_id INT,
+    service_id INT,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+    FOREIGN KEY (service_id) REFERENCES services(service_id)
+);
+
 
 -- Table for storing bookings' services
 -- CREATE TABLE booking_services (
