@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import mysql.connector
+from PIL import Image, ImageTk
 
 class SalonApp(tk.Tk):
 	
@@ -157,30 +158,47 @@ class RegisterPage(tk.Frame):
 		else:
 			self.login_status_label.config(text="Invalid email or password", fg="red")
 
+
 class HomePage(tk.Frame): 
-	def __init__(self, parent, controller):
-		tk.Frame.__init__(self, parent)
-		label = ttk.Label(self, text ="Home")
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = ttk.Label(self, text ="Home")
+        label.grid(row = 0, column = 4, padx = 10, pady = 10)
+
+        styles = [
+            {'image': 'image.png', 'name': 'Style 1', 'description': 'Description 1', 'price': 'Price 1', 'duration': 'Duration 1'},
+            {'image': 'image.png', 'name': 'Style 2', 'description': 'Description 2', 'price': 'Price 2', 'duration': 'Duration 2'},
+            # Add more styles as needed
+        ]
+
+        for i, style in enumerate(styles):
+            card = tk.Frame(self)
+            img = Image.open(style['image'])
+            img = ImageTk.PhotoImage(img)
+            img_label = tk.Label(card, image=img)
+            img_label.image = img
+            img_label.grid(row=0, column=0, columnspan=4)
+
+            name_label = ttk.Label(card, text=style['name'])
+            name_label.grid(row=1, column=0)
+
+            desc_label = ttk.Label(card, text=style['description'])
+            desc_label.grid(row=1, column=1)
+
+            price_label = ttk.Label(card, text=style['price'])
+            price_label.grid(row=1, column=2)
+
+            duration_label = ttk.Label(card, text=style['duration'])
+            duration_label.grid(row=1, column=3)
+
+            card.grid(row=i+1, column=0, padx=10, pady=10)
+
+# class HomePage(tk.Frame): 
+# 	def __init__(self, parent, controller):
+# 		tk.Frame.__init__(self, parent)
+# 		label = ttk.Label(self, text ="Home")
 			
-		label.grid(row = 0, column = 4, padx = 10, pady = 10)
-
-		# # button to show frame 2 with text
-		# # layout2
-		# button1 = ttk.Button(self, text ="Page 1",
-		# 					command = lambda : controller.show_frame(Page1))
-	
-		# # putting the button in its place by 
-		# # using grid
-		# button1.grid(row = 1, column = 1, padx = 10, pady = 10)
-
-		# # button to show frame 3 with text
-		# # layout3
-		# button2 = ttk.Button(self, text ="Startpage",
-		# 					command = lambda : controller.show_frame(StartPage))
-	
-		# putting the button in its place by
-		# using grid
-		# button2.grid(row = 2, column = 1, padx = 10, pady = 10)
+# 		label.grid(row = 0, column = 4, padx = 10, pady = 10)
 
 app = SalonApp()
 app.mainloop()
