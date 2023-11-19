@@ -5,9 +5,18 @@ from PIL import Image, ImageTk
 from dataclasses import dataclass
 from tkcalendar import Calendar
 from datetime import datetime
+from tktimepicker import AnalogPicker, AnalogThemes
+from dataclasses import dataclass, field
 
 HEIGHT = 600
 WIDTH = 600
+
+
+@dataclass
+class Booking():
+    service: any = field(default=None)
+    date: any = field(default=None)
+    time: any = field(default=None)
 
 class Database():
     # def __init__(self):
@@ -40,7 +49,7 @@ class SalonApp(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (LoginPage, RegisterPage, HomePage, ServicePage, DatePicker):
+        for F in (LoginPage, RegisterPage, HomePage, ServicePage, DatePicker, TimePicker):
 
             frame = F(container, self)
 
@@ -265,28 +274,31 @@ class ServicePage(tk.Frame):
         self.controller = controller
         self.service = None
 
+        # Configure the rows and columns to expand
+        # for i in range(7):
+        #     self.grid_rowconfigure(i, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+
         self.back_button = ttk.Button(self, text="Back", command=self.handle_back)
-        self.back_button.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
+        self.back_button.grid(row=0, column=0, padx=10, pady=10,)
 
         self.image_label = tk.Label(self)
-        self.image_label.grid(row=1, column=0)
+        self.image_label.grid(row=1, column=0, )
 
-        self.name_label = ttk.Label(self)
-        self.name_label.grid(row=2, column=0)
+        self.name_label = ttk.Label(self, anchor='center')
+        self.name_label.grid(row=2, column=0,)
 
-        self.desc_label = ttk.Label(self)
+        self.desc_label = ttk.Label(self, anchor='center')
         self.desc_label.grid(row=3, column=0)
 
-        self.price_label = ttk.Label(self)
-        self.price_label.grid(row=4, column=0)
+        self.price_label = ttk.Label(self, anchor='center')
+        self.price_label.grid(row=4, column=0, )
 
-        self.duration_label = ttk.Label(self)
-        self.duration_label.grid(row=5, column=0)
+        self.duration_label = ttk.Label(self, anchor='center')
+        self.duration_label.grid(row=5, column=0, )
 
         self.book_button = ttk.Button(self, text="Book Appointment", command=self.book_appointment)
-        self.book_button.grid(row=6, column=0)
-
-
+        self.book_button.grid(row=6, column=0,)
 
     def handle_back(self):
         self.controller.show_frame(HomePage, self.customer_id)
@@ -321,10 +333,6 @@ class DatePicker(tk.Frame):
         self.controller = controller
         self.service = None
 
-        currentSecond= datetime.now().second
-        currentMinute = datetime.now().minute
-        currentHour = datetime.now().hour
-
         currentDay = datetime.now().day
         currentMonth = datetime.now().month
         currentYear = datetime.now().year
@@ -341,8 +349,7 @@ class DatePicker(tk.Frame):
         
         # Add Button and Label
         tk.Button(self, text = "Get Date",
-            command = self.send_date()).pack(pady = 20)
-
+            command = self.send_date).pack(pady = 20)
 
     def handle_back(self):
         self.controller.show_frame(ServicePage, self.service, self.customer_id)
@@ -352,8 +359,60 @@ class DatePicker(tk.Frame):
         self.customer_id = args[1]
 
     def send_date(self):
-        print(self.cal.get_date())
+        self.controller.show_frame(TimePicker, self.service, self.customer_id, self.cal.get_date())
 
+class TimePicker(tk.Frame): 
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+        self.service = None
+        self.back_button = ttk.Button(self, text="Back", command=self.handle_back).pack(pady = 20)
+
+        self.time_picker = AnalogPicker(self)
+        self.time_picker.pack(expand=True, fill="both")
+
+        theme = AnalogThemes(self.time_picker)
+        theme.setNavyBlue()
+
+        tk.Button(self, text = "Select Time",
+                    command = self.send_time).pack(pady = 20)
+
+
+    def handle_back(self):
+        self.controller.show_frame(ServicePage, self.service, self.customer_id)
+
+    def set_data(self, args):
+        self.service = args[0]
+        self.customer_id = args[1]
+        self.date = args[2]
+
+    def send_time(self):
+        time = self.time_picker.time()
+        print(self.time_picker.time())
+        self.controller.show_frame(TimePicker, self.service, self.customer_id, self.date, self.time_picker.time())
+
+        
+class StylistPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        self.back_button = ttk.Button(self, text="Back", command=self.handle_back)
+        self.back_button.pack(pady=10)
+
+        self.stylists = ["Stylist 1", "Stylist 2", "Stylist 3"]  # replace with actual stylist names
+
+        for stylist in self.stylists:
+            button = ttk.Button(self, text=stylist, command=lambda stylist=stylist: self.select_stylist(stylist))
+            button.pack(pady=10)
+
+    def handle_back(self):
+        self.controller.show_frame(TimePicker, self.service, self.customer_id, self.date)
+
+    def select_stylist(self, stylist):
+        # save the selected stylist and navigate to the booking page
+        self.controller.selected_stylist = stylist
+        self.controller.show_frame("BookingPage")  # replace with the name of the booking page    
 
 app = SalonApp()
 app.mainloop()

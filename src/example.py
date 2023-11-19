@@ -1,6 +1,15 @@
 import tkinter as tk
 from tkinter import ttk
+from dataclasses import dataclass, field
 
+HEIGHT = 600
+WIDTH = 600
+
+@dataclass
+class Booking():
+    service: any = 1
+    date: any = field(default=None)
+    time: any = field(default=None)
 
 LARGEFONT =("Verdana", 35)
 
@@ -102,6 +111,7 @@ class Page1(tk.Frame):
 		# putting the button in its place by 
 		# using grid
 		button2.grid(row = 2, column = 1, padx = 10, pady = 10)
+		Booking.service = Booking.service+1
 
 
 
@@ -131,6 +141,12 @@ class Page2(tk.Frame):
 		# using grid
 		button2.grid(row = 2, column = 1, padx = 10, pady = 10)
 
+		button3 = ttk.Button(self, text ="text",
+							command = lambda : print(Booking.service))
+	
+		# putting the button in its place by
+		# using grid
+		button3.grid(row = 3, column = 1, padx = 10, pady = 10)
 
 # Driver Code
 app = tkinterApp()

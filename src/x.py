@@ -1,15 +1,6 @@
 # Import Required Library
 from tkinter import *
 from tkcalendar import Calendar
-from datetime import datetime
-
-currentSecond= datetime.now().second
-currentMinute = datetime.now().minute
-currentHour = datetime.now().hour
-
-currentDay = datetime.now().day
-currentMonth = datetime.now().month
-currentYear = datetime.now().year
 
 # Create Object
 root = Tk()
@@ -19,13 +10,17 @@ root.geometry("400x400")
  
 # Add Calendar
 cal = Calendar(root, selectmode = 'day',
-               year = currentYear, month = currentMonth,
-               day = currentDay,)
-
-
+               year = 2020, month = 5,
+               day = 22)
+ 
 cal.pack(pady = 20)
  
 def grad_date():
+    print(cal.get_date())
+    print(cal.date.year.get())
+    print(cal.date.month)
+    print(cal.date.day)
+
     date.config(text = "Selected Date is: " + cal.get_date())
  
 # Add Button and Label
