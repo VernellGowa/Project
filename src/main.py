@@ -49,7 +49,7 @@ class SalonApp(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (LoginPage, RegisterPage, HomePage, ServicePage, DatePicker, TimePicker):
+        for F in (LoginPage, RegisterPage, HomePage, ServicePage, DatePicker, TimePicker, StylistPage):
 
             frame = F(container, self)
 
@@ -266,7 +266,8 @@ class HomePage(tk.Frame):
 
     def show_service_page(self, service):
         # Show the ServicePage with the details of the selected service
-        self.controller.show_frame(ServicePage, service, self.customer_id)
+        Booking.service = service
+        self.controller.show_frame(ServicePage, self.customer_id)
 
 class ServicePage(tk.Frame): 
     def __init__(self, parent, controller):
@@ -304,8 +305,8 @@ class ServicePage(tk.Frame):
         self.controller.show_frame(HomePage, self.customer_id)
 
     def set_data(self, args):
-        self.service = args[0]
-        self.customer_id = args[1]
+        self.service = Booking.service
+        self.customer_id = args[0]
 
         # Load the image
         img = Image.open(self.service[5])
@@ -321,7 +322,8 @@ class ServicePage(tk.Frame):
 
     def book_appointment(self):
         # Code to book an appointment
-        self.controller.show_frame(DatePicker, self.service, self.customer_id)
+        Booking.service = self.service
+        self.controller.show_frame(DatePicker, self.customer_id)
         # query = "INSERT INTO bookings (customer_id, service_id) VALUES (%s, %s)"
         # Database.cursor.execute(query, (self.customer_id, self.service[0]))
         # Database.connection.commit()
@@ -352,14 +354,15 @@ class DatePicker(tk.Frame):
             command = self.send_date).pack(pady = 20)
 
     def handle_back(self):
-        self.controller.show_frame(ServicePage, self.service, self.customer_id)
+        self.controller.show_frame(ServicePage, self.customer_id)
 
     def set_data(self, args):
-        self.service = args[0]
-        self.customer_id = args[1]
+        self.service = Booking.service
+        self.customer_id = args[0]
 
     def send_date(self):
-        self.controller.show_frame(TimePicker, self.service, self.customer_id, self.cal.get_date())
+        Booking.date = self.cal.get_date()
+        self.controller.show_frame(TimePicker, self.customer_id)
 
 class TimePicker(tk.Frame): 
     def __init__(self, parent, controller):
@@ -379,17 +382,17 @@ class TimePicker(tk.Frame):
 
 
     def handle_back(self):
-        self.controller.show_frame(ServicePage, self.service, self.customer_id)
+        self.controller.show_frame(ServicePage,  self.customer_id)
 
     def set_data(self, args):
-        self.service = args[0]
-        self.customer_id = args[1]
-        self.date = args[2]
+        self.service = Booking.service
+        self.customer_id = args[0]
+        self.date = Booking.date
 
     def send_time(self):
-        time = self.time_picker.time()
+        Booking.time = self.time_picker.time()
         print(self.time_picker.time())
-        self.controller.show_frame(TimePicker, self.service, self.customer_id, self.date, self.time_picker.time())
+        self.controller.show_frame(StylistPage, self.customer_id)
 
         
 class StylistPage(tk.Frame):
@@ -407,7 +410,7 @@ class StylistPage(tk.Frame):
             button.pack(pady=10)
 
     def handle_back(self):
-        self.controller.show_frame(TimePicker, self.service, self.customer_id, self.date)
+        self.controller.show_frame(TimePicker, self.customer_id)
 
     def select_stylist(self, stylist):
         # save the selected stylist and navigate to the booking page
