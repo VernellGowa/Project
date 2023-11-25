@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 # import booking
 from booking import Booking
 from datetime import datetime
@@ -61,9 +62,9 @@ class StylistPage(tk.Frame):
             email_label.grid(row=1, column=0, padx = 35, pady = 5)
 
             for child in card.winfo_children():
-                child.bind("<Button-1>", lambda e, service=result: self.select_stylist(result[0]))
+                child.bind("<Button-1>", lambda e, result: self.select_stylist(result[0]))
 
-            card.bind("<Button-1>", lambda e, service=result: self.select_stylist(result[0]))
+            card.bind("<Button-1>", lambda e, result: self.select_stylist(result[0]))
             card.grid(row=i+2, column=0, pady=5)
 
     def set_data(self, args):
@@ -79,4 +80,7 @@ class StylistPage(tk.Frame):
         query = "INSERT INTO bookings (customer_id, service_id, stylist_id, booking_date) VALUES (%s, %s, %s, %s)"
         database.Database.cursor.execute(query, (self.customer_id, Booking.service[0], Booking.stylist_id, f"{Booking.date} {Booking.time}"))
         database.Database.conn.commit()
-        self.controller.show_frame(home_page.HomePage, self.customer_id)  # replace with the name of the booking page 
+        
+        messagebox.showerror("Success", "Booking successful!")
+        
+        self.controller.show_frame(home_page.HomePage, self.customer_id) 
