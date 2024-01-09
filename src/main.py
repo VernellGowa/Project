@@ -9,6 +9,7 @@ import register_page
 import home_page
 import service_page
 import date_picker_page
+import booking_page
 import time_picker_page
 import stylist_page
 
@@ -36,7 +37,7 @@ class SalonApp(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (login_page.LoginPage, register_page.RegisterPage, home_page.HomePage, service_page.ServicePage, date_picker_page.DatePicker, time_picker_page.TimePicker, stylist_page.StylistPage):
+        for F in (login_page.LoginPage, register_page.RegisterPage, home_page.HomePage, service_page.ServicePage, date_picker_page.DatePicker, time_picker_page.TimePicker, stylist_page.StylistPage, booking_page.BookingPage):
 
             frame = F(container, self)
 
