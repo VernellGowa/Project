@@ -24,6 +24,7 @@ class HomePage(tk.Frame):
         style = ttk.Style()
         style.configure("Grey.TFrame", background="dark grey")
         style.configure("White.TLabel", foreground="white", background="dark grey", font=("Verdana", 30))
+        style.configure("Blue.TFrame", background="light blue")
 
         # Create an app bar at the top
         self.app_bar = ttk.Frame(self, width=self.controller.WIDTH, style="Grey.TFrame")
@@ -39,12 +40,10 @@ class HomePage(tk.Frame):
 
         self.bookings_button = ttk.Button(self.app_bar, image=menu_icon, command=self.show_booking_page)
         self.bookings_button.image = menu_icon  # Keep a reference to prevent garbage collection
-        self.bookings_button.pack(side="right", padx=10)
+        self.bookings_button.pack(side="right", padx=15)
 
         # Create a canvas and a vertical scrollbar
         self.canvas = tk.Canvas(self, bg=self.controller.COLOUR)
-        style = ttk.Style()
-        style.configure("Blue.TFrame", background="light blue")
 
         self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.scrollable_frame = ttk.Frame(self.canvas, style="Blue.TFrame")
@@ -75,7 +74,7 @@ class HomePage(tk.Frame):
 
         # Create a sort by dropdown
         self.sort_by_options = ['Relevance', 'Price: Low to High', 'Price: High to Low']
-        self.sort_by = ttk.Combobox(self.sort_by_frame, values=self.sort_by_options, state='readonly')
+        self.sort_by = ttk.Combobox(self.sort_by_frame, values=self.sort_by_options, state='readonly', height=5)
         self.sort_by.pack(side='left', padx=10)
         self.sort_by.set('Relevance')
 
@@ -131,7 +130,7 @@ class HomePage(tk.Frame):
             price_label = ttk.Label(card, text=f'£{result[3]}')
             price_label.grid(row=4, column=0)
 
-            duration_label = ttk.Label(card, text=result[4])
+            duration_label = ttk.Label(card, text=f"Duration: {result[4]} mins")
             duration_label.grid(row=5, column=0, pady=(0, 10))
 
             for child in card.winfo_children()[1:]:
