@@ -14,10 +14,10 @@ class HomePage(tk.Frame):
 
         query = """
             SELECT sv.id, name, description, price, duration, image, lk.id FROM services sv
-            LEFT JOIN likes lk ON sv.id = lk.service_id AND lk.customer_id = 9
+            LEFT JOIN likes lk ON sv.id = lk.service_id AND lk.customer_id = %s
             ORDER BY lk.id DESC
         """
-        database.Database.cursor.execute(query, ())
+        database.Database.cursor.execute(query, (self.customer_id,))
         self.results = database.Database.cursor.fetchall()
 
         # Create a canvas and a vertical scrollbar
