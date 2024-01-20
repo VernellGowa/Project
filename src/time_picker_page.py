@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-# import booking
+from PIL import Image, ImageTk
 from booking import Booking
 from datetime import datetime
 import stylist_page
@@ -15,8 +15,20 @@ class TimePicker(tk.Frame):
 
         self.configure(bg=self.controller.COLOUR)
 
-        self.back_button = ttk.Button(self, text="Back", command=self.handle_back).pack(pady = 20)
+        # Create an app bar at the top
+        self.app_bar = ttk.Frame(self, width=self.controller.WIDTH, style="Grey.TFrame")
+        self.app_bar.pack(side="top", fill="x")
 
+        back_icon = Image.open("back.png")
+        back_icon = back_icon.resize((35, 35))
+        back_icon = ImageTk.PhotoImage(back_icon)
+
+        self.back_button = ttk.Button(self.app_bar, image=back_icon, command=self.handle_back)
+        self.back_button.image = back_icon  # Keep a reference to prevent garbage collection
+        self.back_button.pack(side="left", padx=(15, 0))
+
+        self.app_title = ttk.Label(self.app_bar, text="Choose Time", style="White.TLabel")
+        self.app_title.pack(anchor="center", padx=40, pady=10)
         self.time_picker = AnalogPicker(self)
         self.time_picker.pack(expand=True, fill="both")
 

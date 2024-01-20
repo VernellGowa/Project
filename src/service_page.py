@@ -28,15 +28,15 @@ class ServicePage(tk.Frame):
 
         self.home_button = ttk.Button(self.app_bar, image=home_icon, command=self.handle_back)
         self.home_button.image = home_icon  # Keep a reference to prevent garbage collection
-        self.home_button.pack(side="left", padx=15)
+        self.home_button.pack(side="left", padx=(15, 0))
 
-        self.app_title = ttk.Label(self.app_bar, text="Bookings", style="White.TLabel")
+        self.app_title = ttk.Label(self.app_bar, style="White.TLabel")
         self.app_title.pack(anchor="center", padx=40, pady=10)
 
         font_style = ("Helvetica", 14)
 
         self.image_label = tk.Label(self, bg=self.controller.COLOUR)
-        self.image_label.grid(row=1, column=0, pady=(20, 0))
+        self.image_label.grid(row=1, column=0, pady=(40, 10))
 
         self.name_label = ttk.Label(self, anchor='center', background=self.controller.COLOUR, font=font_style)
         self.name_label.grid(row=2, column=0)
@@ -50,8 +50,9 @@ class ServicePage(tk.Frame):
         self.duration_label = ttk.Label(self, anchor='center', background=self.controller.COLOUR, font=font_style)
         self.duration_label.grid(row=5, column=0)
 
-        self.book_button = ttk.Button(self, text="Book Appointment", command=self.book_appointment)
-        self.book_button.grid(row=6, column=0)
+
+        self.book_button = ttk.Button(self, text="Book Appointment", command=self.book_appointment, width=30,)
+        self.book_button.grid(row=6, column=0, pady=20)
 
     def handle_back(self):
         self.controller.show_frame(home_page.HomePage, self.customer_id)
@@ -67,6 +68,7 @@ class ServicePage(tk.Frame):
         self.image_label.image = img
 
         # Update the labels with the service details
+        self.app_title.config(text=self.service[1])
         self.name_label.config(text=self.service[1])
         self.desc_label.config(text=self.service[2])
         self.price_label.config(text=f'£{self.service[3]}')

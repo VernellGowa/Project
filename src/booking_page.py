@@ -49,7 +49,7 @@ class BookingPage(tk.Frame):
 
         # Create a new frame for the search results
         self.results_frame = ttk.Frame(self.scrollable_frame, style="Blue.TFrame")
-        self.results_frame.grid(row=3, column=0, padx=10)
+        self.results_frame.grid(row=3, column=0, padx=10.)
 
     def display_services(self, services):
         # Add the scrollable frame to the canvas at the center position
