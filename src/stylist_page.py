@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-# import booking
+from PIL import Image, ImageTk
 from booking import Booking
 from datetime import datetime
 from tktimepicker import AnalogPicker, AnalogThemes
@@ -15,10 +15,27 @@ class StylistPage(tk.Frame):
         self.controller = controller
         self.customer_id = None
 
-        # Create a canvas and a vertical scrollbar
-        self.canvas = tk.Canvas(self, bg=self.controller.COLOUR)
         style = ttk.Style()
         style.configure("Blue.TFrame", background="light blue")
+
+        # Create an app bar at the top
+        self.app_bar = ttk.Frame(self, width=self.controller.WIDTH, style="Grey.TFrame")
+        self.app_bar.pack(side="top", fill="x")
+
+        back_icon = Image.open("back.png")
+        back_icon = back_icon.resize((35, 35))
+        back_icon = ImageTk.PhotoImage(back_icon)
+
+        self.back_button = ttk.Button(self.app_bar, image=back_icon, command=self.handle_back)
+        self.back_button.image = back_icon  # Keep a reference to prevent garbage collection
+        self.back_button.pack(side="left", padx=15)
+
+        self.app_title = ttk.Label(self.app_bar, text ="Choose Stylist", style="White.TLabel")
+        self.app_title.pack(side="left", padx=40, pady=10)
+
+        # Create a canvas and a vertical scrollbar
+        self.canvas = tk.Canvas(self, bg=self.controller.COLOUR)
+
 
         self.scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.scrollable_frame = ttk.Frame(self.canvas, style="Blue.TFrame")
@@ -35,12 +52,6 @@ class StylistPage(tk.Frame):
 
         # Configure the scroll region of the canvas whenever its size changes
         self.scrollable_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
-
-        back_button = ttk.Button(self.scrollable_frame, text="Back", command=self.handle_back)
-        back_button.grid(row = 0, column = 0, padx = 10, pady = 10)
-
-        label = ttk.Label(self.scrollable_frame, text ="Choose Stylist", background="light blue", font=("Verdana", 35))
-        label.grid(row = 1, column = 0, padx = 10, pady = 10)
 
         query = """SELECT st.id, first_name, last_name, email FROM stylists st
             LEFT JOIN bookings bk ON st.id = bk.stylist_id
@@ -65,7 +76,7 @@ class StylistPage(tk.Frame):
                 child.bind("<Button-1>", lambda e, result: self.select_stylist(result[0]))
 
             card.bind("<Button-1>", lambda e, result: self.select_stylist(result[0]))
-            card.grid(row=i+2, column=0, pady=5)
+            card.grid(row=i, column=0, pady=(20,5) if i == 0 else 5)
 
     def set_data(self, args):
         self.service = Booking.service
