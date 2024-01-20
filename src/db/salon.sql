@@ -1,30 +1,11 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1
--- Généré le : sam. 25 nov. 2023 à 13:25
--- Version du serveur : 10.4.28-MariaDB
--- Version de PHP : 8.2.4
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Base de données : `salon`
+-- Database: `salon`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `bookings`
+-- Table structure for table `bookings`
 --
 
 CREATE TABLE `bookings` (
@@ -39,7 +20,7 @@ CREATE TABLE `bookings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `bookings`
+-- Dumping data for table `bookings`
 --
 
 INSERT INTO `bookings` (`id`, `customer_id`, `stylist_id`, `service_id`, `booking_date`, `created_at`, `updated_at`, `cancelled_at`) VALUES
@@ -48,7 +29,7 @@ INSERT INTO `bookings` (`id`, `customer_id`, `stylist_id`, `service_id`, `bookin
 -- --------------------------------------------------------
 
 --
--- Structure de la table `customers`
+-- Table structure for table `customers`
 --
 
 CREATE TABLE `customers` (
@@ -63,7 +44,7 @@ CREATE TABLE `customers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `customers`
+-- Dumping data for table `customers`
 --
 
 INSERT INTO `customers` (`id`, `first_name`, `last_name`, `phone_number`, `email`, `password`, `created_at`, `gender`) VALUES
@@ -72,7 +53,7 @@ INSERT INTO `customers` (`id`, `first_name`, `last_name`, `phone_number`, `email
 -- --------------------------------------------------------
 
 --
--- Structure de la table `likes`
+-- Table structure for table `likes`
 --
 
 CREATE TABLE `likes` (
@@ -81,10 +62,38 @@ CREATE TABLE `likes` (
   `service_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `likes`
+--
+
+INSERT INTO `likes` (`id`, `customer_id`, `service_id`) VALUES
+(3, 9, 8);
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `services`
+-- Table structure for table `ratings`
+--
+
+CREATE TABLE `ratings` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `booking_id` int(11) NOT NULL,
+  `score` int(11) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ratings`
+--
+
+INSERT INTO `ratings` (`id`, `customer_id`, `booking_id`, `score`, `created_at`) VALUES
+(1, 9, 4, 4, '2024-01-12 17:22:26');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `services`
 --
 
 CREATE TABLE `services` (
@@ -98,7 +107,7 @@ CREATE TABLE `services` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `services`
+-- Dumping data for table `services`
 --
 
 INSERT INTO `services` (`id`, `name`, `description`, `price`, `created_at`, `duration`, `image`) VALUES
@@ -118,7 +127,7 @@ INSERT INTO `services` (`id`, `name`, `description`, `price`, `created_at`, `dur
 -- --------------------------------------------------------
 
 --
--- Structure de la table `stylists`
+-- Table structure for table `stylists`
 --
 
 CREATE TABLE `stylists` (
@@ -131,7 +140,7 @@ CREATE TABLE `stylists` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `stylists`
+-- Dumping data for table `stylists`
 --
 
 INSERT INTO `stylists` (`id`, `first_name`, `last_name`, `phone_number`, `email`, `created_at`) VALUES
@@ -142,11 +151,11 @@ INSERT INTO `stylists` (`id`, `first_name`, `last_name`, `phone_number`, `email`
 (5, 'Emma', 'Garcia', '01913456789', 'emma@example.com', '2023-11-19 19:38:02');
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `bookings`
+-- Indexes for table `bookings`
 --
 ALTER TABLE `bookings`
   ADD PRIMARY KEY (`id`),
@@ -155,13 +164,13 @@ ALTER TABLE `bookings`
   ADD KEY `service_id` (`service_id`);
 
 --
--- Index pour la table `customers`
+-- Indexes for table `customers`
 --
 ALTER TABLE `customers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `likes`
+-- Indexes for table `likes`
 --
 ALTER TABLE `likes`
   ADD PRIMARY KEY (`id`),
@@ -169,51 +178,71 @@ ALTER TABLE `likes`
   ADD KEY `service_id` (`service_id`);
 
 --
--- Index pour la table `services`
+-- Indexes for table `ratings`
+--
+ALTER TABLE `ratings`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `stylist_id` (`booking_id`),
+  ADD KEY `customer_id` (`customer_id`);
+
+--
+-- Indexes for table `services`
 --
 ALTER TABLE `services`
   ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `stylists`
+-- Indexes for table `stylists`
 --
 ALTER TABLE `stylists`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `bookings`
+-- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT pour la table `customers`
+-- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT pour la table `services`
+-- AUTO_INCREMENT for table `likes`
+--
+ALTER TABLE `likes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `ratings`
+--
+ALTER TABLE `ratings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT pour la table `stylists`
+-- AUTO_INCREMENT for table `stylists`
 --
 ALTER TABLE `stylists`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- Contraintes pour les tables déchargées
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `bookings`
+-- Constraints for table `bookings`
 --
 ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
@@ -221,13 +250,9 @@ ALTER TABLE `bookings`
   ADD CONSTRAINT `bookings_ibfk_3` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`);
 
 --
--- Contraintes pour la table `likes`
+-- Constraints for table `likes`
 --
 ALTER TABLE `likes`
   ADD CONSTRAINT `likes_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
   ADD CONSTRAINT `likes_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`);
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
