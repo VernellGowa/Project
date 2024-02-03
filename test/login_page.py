@@ -1,8 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 import register_page
-import home_page
-from database import Database
 from tkinter import messagebox
 
 class LoginPage(tk.Frame):
@@ -35,14 +33,4 @@ class LoginPage(tk.Frame):
         sign_up_button.pack(pady=5)
 
     def login(self, email, password):
-        # Check if the email and password match a customer in the database
-        query = "SELECT id FROM customers WHERE email = %s AND password = %s"
-        Database.cursor.execute(query, (email, password))
-        result = Database.cursor.fetchone()
-
-        # if result:
-        #     customer_id = result[0]
-        #     self.controller.show_frame(home_page.HomePage, customer_id)
-        # else:
-        #     messagebox.showerror("Error", "Invalid email or password")
-        self.controller.show_frame(home_page.HomePage, 9)
+        pass
