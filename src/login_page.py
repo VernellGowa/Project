@@ -14,6 +14,10 @@ class LoginPage(tk.Frame):
         # Set the background color to light blue
         self.configure(bg=self.controller.COLOUR)
 
+        # Title
+        label_title = tk.Label(self, text="Login Page", bg=self.controller.COLOUR, font=("Helvetica", 20, 'bold'))
+        label_title.pack(pady=(30,0))
+
         # Email Address
         label_email = tk.Label(self, text="Email Address:", bg=self.controller.COLOUR)
         label_email.pack(pady=(30,0))

@@ -5,6 +5,7 @@ from database import Database
 import login_page
 import home_page
 from tkinter import messagebox
+import bcrypt
 
 class RegisterPage(tk.Frame, Database):
     def __init__(self, parent, controller):
@@ -14,6 +15,9 @@ class RegisterPage(tk.Frame, Database):
         self.controller = controller
 
         self.configure(bg='light blue')
+
+        label_title = tk.Label(self, text="Register Page", bg=self.controller.COLOUR, font=("Helvetica", 20, 'bold'))
+        label_title.pack(pady=(30,0))
 
         # First Name
         label_first_name = tk.Label(self, text="First Name:", bg=self.controller.COLOUR)
@@ -96,8 +100,14 @@ class RegisterPage(tk.Frame, Database):
             messagebox.showerror("Error", "Email already registered!")
         else:
             # Insert a new customer into the database
+            password = self.hash_password(password)
             query = "INSERT INTO customers (first_name, last_name, phone_number, gender, email, password) VALUES (%s, %s, %s, %s, %s, %s)"
             Database.cursor.execute(query, (first_name, last_name, phone_number, gender, email, password))
             Database.conn.commit()
             customer_id = Database.cursor.lastrowid
             self.controller.show_frame(home_page.HomePage, customer_id)
+
+    def hash_password(self, password):
+        # Hash a password for the first time, with a randomly-generated salt
+        hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        return hashed.decode('utf-8')
