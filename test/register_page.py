@@ -83,6 +83,11 @@ class RegisterPage(tk.Frame):
         if not first_name or not last_name or not phone_number or not gender or not email or not password:
             messagebox.showerror("Error", "All fields are required!")
             return
+        
+        # Check if the phone number is numerical
+        if not phone_number.isdigit():
+            messagebox.showerror("Error", "Phone number must be numerical!")
+            return
 
         # Check if the email is valid
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
@@ -108,6 +113,9 @@ class RegisterPage(tk.Frame):
             Database.cursor.execute(query, (first_name, last_name, phone_number, gender, email, password))
             Database.conn.commit()
             customer_id = Database.cursor.lastrowid
+
+            messagebox.showerror("Succes", "You have been registered successfully!")
+
             self.controller.show_frame(home_page.HomePage, customer_id)
 
     def hash_password(self, password):
