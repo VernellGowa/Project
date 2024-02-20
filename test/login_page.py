@@ -46,19 +46,21 @@ class LoginPage(tk.Frame):
     def login(self, email, password):
 
         # Check if the email and password match a customer in the database
-        query = "SELECT id, password FROM customers WHERE email = %s"
-        Database.cursor.execute(query, (email,))
-        result = Database.cursor.fetchone()
+        # query = "SELECT id, password FROM customers WHERE email = %s"
+        # Database.cursor.execute(query, (email,))
+        # result = Database.cursor.fetchone()
 
-        if result:
-            customer_id = result[0]
-            hashed_password = result[1]
+        # if result:
+        #     customer_id = result[0]
+        #     hashed_password = result[1]
 
-            if self.check_password(password, hashed_password):
-                self.controller.show_frame(home_page.HomePage, customer_id)
-                return
+        #     if self.check_password(password, hashed_password):
+        #         self.controller.show_frame(home_page.HomePage, customer_id)
+        #         return
 
-        messagebox.showerror("Error", "Invalid email or password")
+        # messagebox.showerror("Error", "Invalid email or password")
+        self.controller.show_frame(home_page.HomePage, 10)
+        
 
     def check_password(self, password, hashed_password):
         # Check that a unhashed password matches one that has previously been hashed

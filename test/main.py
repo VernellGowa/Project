@@ -6,6 +6,8 @@ from datetime import datetime
 import register_page
 import login_page
 import home_page
+import service_page
+import booking_page
 
 class SalonApp(tk.Tk):
     COLOUR = 'light blue'
@@ -31,7 +33,7 @@ class SalonApp(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (login_page.LoginPage, register_page.RegisterPage, home_page.HomePage):
+        for F in (login_page.LoginPage, register_page.RegisterPage, home_page.HomePage, service_page.ServicePage, booking_page.BookingPage):
 
             frame = F(container, self)
 

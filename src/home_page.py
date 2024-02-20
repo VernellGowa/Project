@@ -13,14 +13,6 @@ class HomePage(tk.Frame):
         self.controller = controller
         self.customer_id = None
 
-        query = """
-            SELECT sv.id, name, description, price, duration, image, lk.id FROM services sv
-            LEFT JOIN likes lk ON sv.id = lk.service_id AND lk.customer_id = %s
-            ORDER BY lk.id DESC
-        """
-        database.Database.cursor.execute(query, (self.customer_id,))
-        self.results = database.Database.cursor.fetchall()
-
         style = ttk.Style()
         style.configure("Grey.TFrame", background="dark grey")
         style.configure("White.TLabel", foreground="white", background="dark grey", font=("Verdana", 30))
@@ -108,6 +100,7 @@ class HomePage(tk.Frame):
         self.scrollable_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
 
         for i, result in enumerate(services):
+            result = list(result)
             card = tk.Frame(self.results_frame, relief=tk.RAISED, borderwidth=3)
 
             heart_button = ttk.Button(card, image=self.unlike_icon if result[6] is None else self.like_icon)
@@ -121,7 +114,7 @@ class HomePage(tk.Frame):
             img_label.image = img
             img_label.grid(row=1, column=0, padx=30, pady=10)
 
-            name_label = ttk.Label(card, text=result[1])
+            name_label = ttk.Label(card, text=result[1], font=("Helvetica", 12, "bold"))
             name_label.grid(row=2, column=0)
 
             desc_label = ttk.Label(card, text=result[2], wraplength=300)
@@ -140,19 +133,26 @@ class HomePage(tk.Frame):
             card.grid(row=i+3, column=0, pady=10)
 
     def like_service(self, service, button):
-        print(service)
-        print(button)
-
         if service[6] is None:
+            # If the service is not liked yet insert a new like into the database
             query = "INSERT INTO likes (customer_id, service_id) VALUES (%s, %s)"
             database.Database.cursor.execute(query, (self.customer_id, service[0]))
+            like_id = database.Database.cursor.lastrowid
             database.Database.conn.commit()
+            # Update the button image to 'liked'
             button.config(image=self.like_icon)
+            # Update the service status to 'liked'
+            service[6] = like_id
+
         else:
+            # If the service is already liked, remove the like from the database
             query = "DELETE FROM likes WHERE id = %s"
             database.Database.cursor.execute(query, (service[6],))
             database.Database.conn.commit()
+            # Update the button image to 'unliked'
             button.config(image=self.unlike_icon)
+            # Update the service status to 'unliked'
+            service[6] = None
 
     def search_services(self):
         # Get the text from the search bar
@@ -205,13 +205,23 @@ class HomePage(tk.Frame):
         # Code to navigate to the bookings page goes here
         pass
 
-    def on_enter_key(self, event):
-        self.search_services()
-
-    def set_data(self, customer_id):
-        self.customer_id = customer_id[0]
-
     def show_service_page(self, service):
         # Show the ServicePage with the details of the selected service
         Booking.service = service
         self.controller.show_frame(service_page.ServicePage, self.customer_id)
+
+    def set_data(self, customer_id):
+        self.customer_id = customer_id[0]
+
+        query = """
+            SELECT sv.id, name, description, price, duration, image, lk.id FROM services sv
+            LEFT JOIN likes lk ON sv.id = lk.service_id AND lk.customer_id = %s
+            ORDER BY lk.id DESC
+        """
+        database.Database.cursor.execute(query, (self.customer_id,))
+        self.results = database.Database.cursor.fetchall()
+
+        self.display_services(self.results)
+
+    def on_enter_key(self, event):
+        self.search_services()
