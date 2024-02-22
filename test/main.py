@@ -8,6 +8,9 @@ import login_page
 import home_page
 import service_page
 import booking_page
+import date_picker_page
+import time_picker_page
+import stylist_page
 
 class SalonApp(tk.Tk):
     COLOUR = 'light blue'
@@ -33,7 +36,7 @@ class SalonApp(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (login_page.LoginPage, register_page.RegisterPage, home_page.HomePage, service_page.ServicePage, booking_page.BookingPage):
+        for F in (login_page.LoginPage, register_page.RegisterPage, home_page.HomePage, service_page.ServicePage, booking_page.BookingPage, date_picker_page.DatePicker, time_picker_page.TimePicker, stylist_page.StylistPage):
 
             frame = F(container, self)
 
@@ -44,7 +47,7 @@ class SalonApp(tk.Tk):
 
             frame.grid(row = 0, column = 0, sticky ="nsew")
 
-        self.show_frame(login_page.LoginPage)
+        self.show_frame(date_picker_page.DatePicker)
 
     # to display the current frame passed as
     # parameter
