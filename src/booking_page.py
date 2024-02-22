@@ -89,22 +89,19 @@ class BookingPage(tk.Frame):
 
             button_frame = ttk.Frame(card)
             button_frame.grid(row=7, column=0, pady=(0, 10))
+            
+            if result[5] < datetime.now():
+                rating_var = StringVar()
 
-            # # Create a "View Service" button inside the frame
-            # view_service_button = ttk.Button(button_frame, text="View Service")
-            # view_service_button.pack(side='left', padx=10)
+                # Create a list of possible ratings
+                ratings = [str(i) for i in range(6)]
 
-            rating_var = StringVar()
+                # Create a combobox for selecting the rating
+                rating_combobox = ttk.Combobox(button_frame, textvariable=rating_var, values=ratings, state='readonly', width=5)
+                rating_combobox.pack(side='left', padx=10)
 
-            # Create a list of possible ratings
-            ratings = [str(i) for i in range(6)]
-
-            # Create a combobox for selecting the rating
-            rating_combobox = ttk.Combobox(button_frame, textvariable=rating_var, values=ratings, state='readonly', width=5)
-            rating_combobox.pack(side='left', padx=10)
-
-            # Set the default rating to 0
-            rating_combobox.current(0)
+                # Set the default rating to 0
+                rating_combobox.current(0)
 
             # Create a "Cancel Booking" button inside the frame
             cancel_or_rate_button = ttk.Button(button_frame, text="Cancel Booking" if result[5] > datetime.now() else "Rate Service",
@@ -127,6 +124,9 @@ class BookingPage(tk.Frame):
         database.Database.cursor.execute(query, (self.customer_id,))
         self.results = database.Database.cursor.fetchall()
 
+        for widget in self.results_frame.winfo_children():
+            widget.destroy()
+            
         # Display the services in the results frame
         self.display_services(self.results)
 
@@ -149,14 +149,12 @@ class BookingPage(tk.Frame):
         """
         database.Database.cursor.execute(query, (service[1]))
         service = database.Database.cursor.fetchone()
-        print(service)
 
         # Show the ServicePage with the details of the selected service
         Booking.service = service
         self.controller.show_frame(service_page.ServicePage, self.customer_id)
         
     def rate_service(self, booking_id, score):
-        print((self.customer_id, booking_id, score))
         query = """
             INSERT INTO ratings (customer_id, booking_id, score) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE score = VALUES(score)
         """

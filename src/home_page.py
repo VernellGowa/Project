@@ -88,10 +88,6 @@ class HomePage(tk.Frame):
         self.like_icon = ImageTk.PhotoImage(like_icon)
         self.unlike_icon = ImageTk.PhotoImage(unlike_icon)
  
-
-        # Display the services in the results frame
-        self.display_services(self.results)
-
     def display_services(self, services):
         # Add the scrollable frame to the canvas at the center position
         self.canvas.create_window((self.controller.WIDTH//2, len(services)*225), window=self.scrollable_frame, anchor="center")

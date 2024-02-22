@@ -58,8 +58,7 @@ class TimePicker(tk.Frame):
 
     def set_data(self, args):
         self.service = Booking.service
-        # self.customer_id = args[0]
-        self.customer_id = None
+        self.customer_id = args[0]
 
     def handle_back(self):
         self.controller.show_frame(date_picker_page.DatePicker,  self.customer_id)

@@ -126,7 +126,7 @@ class HomePage(tk.Frame):
                 child.bind("<Button-1>", lambda e, service=result: self.show_service_page(service))
 
             card.bind("<Button-1>", lambda e, service=result: self.show_service_page(service))
-            card.grid(row=i+3, column=0, pady=10)
+            card.grid(row=i, column=0, pady=10)
 
     def like_service(self, service, button):
         if service[6] is None:

@@ -47,7 +47,7 @@ class SalonApp(tk.Tk):
 
             frame.grid(row = 0, column = 0, sticky ="nsew")
 
-        self.show_frame(date_picker_page.DatePicker)
+        self.show_frame(login_page.LoginPage)
 
     # to display the current frame passed as
     # parameter
