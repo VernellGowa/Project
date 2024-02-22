@@ -19,7 +19,6 @@ class LoginPage(tk.Frame):
         label_title = tk.Label(self, text="Login Page", bg=self.controller.COLOUR, font=("Helvetica", 20, 'bold'))
         label_title.pack(pady=(30,0))
 
-
         # Define font styles
         text_font = font.Font(family='Helvetica', size=12, weight='bold')
 
